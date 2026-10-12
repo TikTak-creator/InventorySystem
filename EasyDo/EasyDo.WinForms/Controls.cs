@@ -1,17 +1,21 @@
 using System.Drawing.Drawing2D;
 
-namespace InventoryApp.UI;
+namespace EasyDo.WinForms;
 
 /// <summary>Панель-карточка со скруглёнными углами и рамкой.</summary>
 public class Card : Panel
 {
     public int Radius { get; set; } = 14;
 
-    public Card()
+    protected UiKit Kit { get; }
+
+    public Card(UiKit kit)
     {
+        ArgumentNullException.ThrowIfNull(kit);
+        Kit = kit;
         DoubleBuffered = true;
         ResizeRedraw = true;
-        BackColor = Theme.Card;
+        BackColor = Kit.Card;
         Padding = new Padding(16);
     }
 
@@ -20,17 +24,20 @@ public class Card : Panel
         base.OnResize(e);
         if (Width > 0 && Height > 0)
         {
-            using var path = Theme.RoundedRect(new Rectangle(0, 0, Width, Height), Radius);
+            using var path = Kit.RoundedRect(new Rectangle(0, 0, Width, Height), Radius);
+            var previous = Region;
             Region = new Region(path);
+            previous?.Dispose();
         }
     }
 
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
+        if (Width < 2 || Height < 2) return;
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        using var path = Theme.RoundedRect(new Rectangle(0, 0, Width - 1, Height - 1), Radius);
-        using var pen = new Pen(Theme.CardBorder);
+        using var path = Kit.RoundedRect(new Rectangle(0, 0, Width - 1, Height - 1), Radius);
+        using var pen = new Pen(Kit.CardBorder);
         e.Graphics.DrawPath(pen, path);
     }
 }
@@ -42,16 +49,16 @@ public class StatCard : Card
     private readonly Label _hint;
     private readonly Color _accent;
 
-    public StatCard(string title, Color accent)
+    public StatCard(UiKit kit, string title, Color accent) : base(kit)
     {
         _accent = accent;
         Dock = DockStyle.Fill;
 
-        var t = Theme.Label(title.ToUpperInvariant(), new Font("Segoe UI Semibold", 8.5f), Theme.Muted);
+        var t = Kit.Label(title.ToUpperInvariant(), Kit.CaptionFont, Kit.Muted);
         t.Location = new Point(20, 16);
-        _value = Theme.Label("—", Theme.StatValue);
+        _value = Kit.Label("—", Kit.StatValue);
         _value.Location = new Point(18, 36);
-        _hint = Theme.Label("", Theme.Small, Theme.Muted);
+        _hint = Kit.Label("", Kit.Small, Kit.Muted);
         _hint.Location = new Point(20, 76);
 
         Controls.AddRange(new Control[] { t, _value, _hint });
@@ -67,9 +74,12 @@ public class StatCard : Card
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
         // Акцентная полоса слева
-        using (var b = new SolidBrush(_accent))
-        using (var p = Theme.RoundedRect(new Rectangle(0, 18, 4, Height - 36), 2))
+        if (Height > 36)
+        {
+            using var b = new SolidBrush(_accent);
+            using var p = Kit.RoundedRect(new Rectangle(0, 18, 4, Height - 36), 2);
             g.FillPath(b, p);
+        }
 
         // Иконка-кружок справа
         int size = 36;
@@ -86,17 +96,24 @@ public class BarChart : Control
 {
     private List<(string Label, decimal Value)> _data = new();
 
-    public BarChart()
+    private readonly UiKit Kit;
+
+    public BarChart(UiKit kit)
     {
+        ArgumentNullException.ThrowIfNull(kit);
+        Kit = kit;
         DoubleBuffered = true;
         ResizeRedraw = true;
-        BackColor = Theme.Card;
-        Font = Theme.Small;
+        BackColor = Kit.Card;
+        Font = Kit.Small;
     }
 
     public void SetData(IEnumerable<(string Label, decimal Value)> data)
     {
-        _data = data.ToList();
+        ArgumentNullException.ThrowIfNull(data);
+        var values = data.ToList();
+        if (values.Any(d => d.Value < 0)) throw new ArgumentOutOfRangeException(nameof(data), "BarChart expects non-negative values.");
+        _data = values;
         Invalidate();
     }
 
@@ -108,7 +125,7 @@ public class BarChart : Control
 
         if (_data.Count == 0 || Width < 40 || Height < 60)
         {
-            TextRenderer.DrawText(g, "Нет данных", Font, ClientRectangle, Theme.Muted,
+            TextRenderer.DrawText(g, Kit.Texts.NoData, Font, ClientRectangle, Kit.Muted,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
             return;
         }
@@ -116,7 +133,7 @@ public class BarChart : Control
         var area = new Rectangle(8, 22, Width - 16, Height - 22 - 26);
         decimal max = Math.Max(1, _data.Max(d => d.Value));
 
-        using (var pen = new Pen(Theme.CardBorder) { DashStyle = DashStyle.Dash })
+        using (var pen = new Pen(Kit.CardBorder) { DashStyle = DashStyle.Dash })
             for (int i = 0; i <= 3; i++)
             {
                 int y = area.Top + area.Height * i / 4;
@@ -138,17 +155,17 @@ public class BarChart : Control
                 var rect = new Rectangle((int)x, (int)(area.Bottom - h), (int)bw, (int)h);
                 using var brush = new LinearGradientBrush(
                     new Rectangle(rect.X, rect.Y - 1, rect.Width, rect.Height + 2),
-                    isLast ? Theme.Pink : Theme.Info, Theme.Accent, LinearGradientMode.Vertical);
-                using var path = Theme.RoundedRect(rect, 6);
+                    isLast ? Kit.Pink : Kit.Info, Kit.Accent, LinearGradientMode.Vertical);
+                using var path = Kit.RoundedRect(rect, 6);
                 g.FillPath(brush, path);
             }
 
             string vText = value >= 1000 ? (value / 1000m).ToString("0.#") + "k" : value.ToString("N0");
             var vRect = new Rectangle((int)(area.Left + slot * i), (int)(area.Bottom - h) - 20, (int)slot, 18);
-            TextRenderer.DrawText(g, vText, Font, vRect, Theme.Text, TextFormatFlags.HorizontalCenter);
+            TextRenderer.DrawText(g, vText, Font, vRect, Kit.Text, TextFormatFlags.HorizontalCenter);
 
             var lRect = new Rectangle((int)(area.Left + slot * i), area.Bottom + 6, (int)slot, 18);
-            TextRenderer.DrawText(g, label, Font, lRect, isLast ? Theme.Text : Theme.Muted, TextFormatFlags.HorizontalCenter);
+            TextRenderer.DrawText(g, label, Font, lRect, isLast ? Kit.Text : Kit.Muted, TextFormatFlags.HorizontalCenter);
         }
     }
 }

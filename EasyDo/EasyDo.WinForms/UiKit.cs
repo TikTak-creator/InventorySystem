@@ -1,39 +1,81 @@
 using System.Drawing.Drawing2D;
 
-namespace InventoryApp.UI;
+namespace EasyDo.WinForms;
 
 /// <summary>Тёмная тема и фабрика стилизованных контролов.</summary>
-public static class Theme
+public sealed partial class UiKit : IDisposable
 {
-    public static readonly Color Bg = Color.FromArgb(13, 15, 24);
-    public static readonly Color Sidebar = Color.FromArgb(18, 20, 32);
-    public static readonly Color Card = Color.FromArgb(24, 27, 42);
-    public static readonly Color CardBorder = Color.FromArgb(42, 46, 68);
-    public static readonly Color Input = Color.FromArgb(32, 36, 55);
-    public static readonly Color Selection = Color.FromArgb(52, 54, 92);
-    public static readonly Color Accent = Color.FromArgb(108, 99, 255);
-    public static readonly Color Text = Color.FromArgb(232, 234, 242);
-    public static readonly Color Muted = Color.FromArgb(138, 144, 168);
-    public static readonly Color Success = Color.FromArgb(34, 197, 94);
-    public static readonly Color Danger = Color.FromArgb(239, 68, 68);
-    public static readonly Color Warning = Color.FromArgb(245, 158, 11);
-    public static readonly Color Info = Color.FromArgb(56, 189, 248);
-    public static readonly Color Pink = Color.FromArgb(236, 72, 153);
+    public UiSkin Skin { get; }
+    public UiTexts Texts { get; }
+    public Func<decimal, string> FormatMoney { get; }
+    internal Font InputFont { get; }
+    internal Font DateFont { get; }
+    internal Font HeaderFont { get; }
+    internal Font CaptionFont { get; }
+    private bool _disposed;
 
-    public static readonly Font Body = new("Segoe UI", 10f);
-    public static readonly Font Small = new("Segoe UI", 9f);
-    public static readonly Font Bold = new("Segoe UI Semibold", 10f);
-    public static readonly Font H1 = new("Segoe UI Semibold", 20f);
-    public static readonly Font H2 = new("Segoe UI Semibold", 12f);
-    public static readonly Font StatValue = new("Segoe UI Semibold", 20f);
-    public static readonly Font Total = new("Segoe UI Semibold", 18f);
+    public UiKit(UiSkin skin = null, UiTexts texts = null, Func<decimal, string> money = null)
+    {
+        Skin = skin ?? new UiSkin();
+        Texts = texts ?? new UiTexts();
+        FormatMoney = money ?? (value => value.ToString("N2"));
+        Body = new(Skin.FontFamily, 10f);
+        Small = new(Skin.FontFamily, 9f);
+        Bold = new(Skin.StrongFontFamily, 10f);
+        H1 = new(Skin.StrongFontFamily, 20f);
+        H2 = new(Skin.StrongFontFamily, 12f);
+        StatValue = new(Skin.StrongFontFamily, 20f);
+        Total = new(Skin.StrongFontFamily, 18f);
+        InputFont = new Font(Skin.FontFamily, 11f);
+        DateFont = new Font(Skin.FontFamily, 10.5f);
+        HeaderFont = new Font(Skin.StrongFontFamily, 9f);
+        CaptionFont = new Font(Skin.StrongFontFamily, 8.5f);
+    }
 
-    public static string Money(decimal v) => v.ToString("N0") + " сом";
+    // Dispose the kit after every window using its fonts has closed.
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+        Body.Dispose();
+        Small.Dispose();
+        Bold.Dispose();
+        H1.Dispose();
+        H2.Dispose();
+        StatValue.Dispose();
+        Total.Dispose();
+        InputFont.Dispose(); DateFont.Dispose(); HeaderFont.Dispose(); CaptionFont.Dispose();
+    }
 
-    public static Color Blend(Color a, Color b, float t) => Color.FromArgb(
+    public Color Bg => Skin.Bg;
+    public Color Sidebar => Skin.Sidebar;
+    public Color Card => Skin.Card;
+    public Color CardBorder => Skin.CardBorder;
+    public Color Input => Skin.Input;
+    public Color Selection => Skin.Selection;
+    public Color Accent => Skin.Accent;
+    public Color Text => Skin.Text;
+    public Color Muted => Skin.Muted;
+    public Color Success => Skin.Success;
+    public Color Danger => Skin.Danger;
+    public Color Warning => Skin.Warning;
+    public Color Info => Skin.Info;
+    public Color Pink => Skin.Pink;
+
+    public Font Body { get; }
+    public Font Small { get; }
+    public Font Bold { get; }
+    public Font H1 { get; }
+    public Font H2 { get; }
+    public Font StatValue { get; }
+    public Font Total { get; }
+
+    public string Money(decimal v) => FormatMoney(v);
+
+    public Color Blend(Color a, Color b, float t) => Color.FromArgb(
         (int)(a.R + (b.R - a.R) * t), (int)(a.G + (b.G - a.G) * t), (int)(a.B + (b.B - a.B) * t));
 
-    public static GraphicsPath RoundedRect(Rectangle r, int radius)
+    public GraphicsPath RoundedRect(Rectangle r, int radius)
     {
         var path = new GraphicsPath();
         radius = Math.Min(radius, Math.Min(r.Width, r.Height) / 2);
@@ -49,7 +91,7 @@ public static class Theme
 
     // ---------- Фабрика контролов ----------
 
-    public static Button Btn(string text, Color? color = null, int width = 130)
+    public Button Btn(string text, Color? color = null, int width = 130)
     {
         var c = color ?? Accent;
         var b = new Button
@@ -71,14 +113,14 @@ public static class Theme
         return b;
     }
 
-    public static Button SecondaryBtn(string text, int width = 120)
+    public Button SecondaryBtn(string text, int width = 120)
     {
         var b = Btn(text, Input, width);
         b.ForeColor = Text;
         return b;
     }
 
-    public static Label Label(string text, Font font = null, Color? color = null) => new()
+    public Label Label(string text, Font font = null, Color? color = null) => new()
     {
         Text = text,
         Font = font ?? Body,
@@ -87,27 +129,27 @@ public static class Theme
         BackColor = Color.Transparent
     };
 
-    public static TextBox TextBox(string placeholder = "", int width = 240) => new()
+    public TextBox TextBox(string placeholder = "", int width = 240) => new()
     {
         PlaceholderText = placeholder,
         BackColor = Input,
         ForeColor = Text,
         BorderStyle = BorderStyle.FixedSingle,
-        Font = new Font("Segoe UI", 11f),
+        Font = InputFont,
         Width = width
     };
 
-    public static ComboBox Combo(int width = 200, bool editable = false) => new()
+    public ComboBox Combo(int width = 200, bool editable = false) => new()
     {
         DropDownStyle = editable ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList,
         FlatStyle = FlatStyle.Flat,
         BackColor = Input,
         ForeColor = Text,
-        Font = new Font("Segoe UI", 11f),
+        Font = InputFont,
         Width = width
     };
 
-    public static NumericUpDown Number(decimal max = 10_000_000, int decimals = 0) => new()
+    public NumericUpDown Number(decimal max = 10_000_000, int decimals = 0) => new()
     {
         Minimum = 0,
         Maximum = max,
@@ -116,21 +158,21 @@ public static class Theme
         BackColor = Input,
         ForeColor = Text,
         BorderStyle = BorderStyle.FixedSingle,
-        Font = new Font("Segoe UI", 11f),
+        Font = InputFont,
         Width = 200
     };
 
-    public static DateTimePicker DatePicker(DateTime value) => new()
+    public DateTimePicker DatePicker(DateTime value) => new()
     {
         Format = DateTimePickerFormat.Short,
         Value = value,
         Width = 130,
-        Font = new Font("Segoe UI", 10.5f),
+        Font = DateFont,
         CalendarMonthBackground = Input,
         CalendarForeColor = Text
     };
 
-    public static DataGridView Grid()
+    public DataGridView Grid()
     {
         var g = new DataGridView
         {
@@ -159,7 +201,7 @@ public static class Theme
         {
             BackColor = Card,
             ForeColor = Muted,
-            Font = new Font("Segoe UI Semibold", 9f),
+            Font = HeaderFont,
             SelectionBackColor = Card,
             SelectionForeColor = Muted,
             Padding = new Padding(6, 0, 6, 0)
@@ -175,7 +217,7 @@ public static class Theme
         return g;
     }
 
-    public static DataGridViewTextBoxColumn Col(string prop, string header, float weight = 100,
+    public DataGridViewTextBoxColumn Col(string prop, string header, float weight = 100,
         string format = null, bool right = false)
     {
         var c = new DataGridViewTextBoxColumn
@@ -196,7 +238,7 @@ public static class Theme
     }
 
     /// <summary>Заголовок страницы: крупный заголовок + подзаголовок.</summary>
-    public static Panel PageHeader(string title, string subtitle)
+    public Panel PageHeader(string title, string subtitle)
     {
         var p = new Panel { Dock = DockStyle.Top, Height = 78, BackColor = Bg };
         var t = Label(title, H1);
@@ -209,9 +251,9 @@ public static class Theme
     }
 
     /// <summary>Карточка с заголовком и содержимым.</summary>
-    public static Card TitledCard(string title, Control body, Control headerRight = null)
+    public Card TitledCard(string title, Control body, Control headerRight = null)
     {
-        var card = new Card { Dock = DockStyle.Fill, Padding = new Padding(18, 14, 18, 14) };
+        var card = new Card(this) { Dock = DockStyle.Fill, Padding = new Padding(18, 14, 18, 14) };
         var head = new Panel { Dock = DockStyle.Top, Height = 40, BackColor = Card };
         var lbl = Label(title, H2);
         lbl.Location = new Point(0, 4);
@@ -228,7 +270,7 @@ public static class Theme
         return card;
     }
 
-    public static void StyleDialog(Form f, string title, Size size)
+    public void StyleDialog(Form f, string title, Size size)
     {
         f.Text = title;
         f.ClientSize = size;
@@ -243,23 +285,23 @@ public static class Theme
     }
 
     /// <summary>Выполнить действие и показать ошибку, если что-то пошло не так.</summary>
-    public static void Safe(Action action)
+    public void Safe(Action action)
     {
         try { action(); }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.Message, Texts.ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    public static bool Confirm(IWin32Window owner, string text) =>
-        MessageBox.Show(owner, text, "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+    public bool Confirm(IWin32Window owner, string text) =>
+        MessageBox.Show(owner, text, Texts.ConfirmTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
-    public static void Notify(IWin32Window owner, string text) =>
-        MessageBox.Show(owner, text, "StockFlow", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    public void Notify(IWin32Window owner, string text) =>
+        MessageBox.Show(owner, text, Texts.ApplicationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-    public static void Warn(IWin32Window owner, string text) =>
-        MessageBox.Show(owner, text, "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+    public void Warn(IWin32Window owner, string text) =>
+        MessageBox.Show(owner, text, Texts.WarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 }
 
 public interface IRefreshable

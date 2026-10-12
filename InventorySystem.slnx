@@ -1,3 +1,14 @@
 <Solution>
   <Project Path="InventoryApp/InventoryApp.csproj" />
+  <Folder Name="/EasyDo/">
+    <Project Path="EasyDo/EasyDo.Core/EasyDo.Core.csproj" />
+    <Project Path="EasyDo/EasyDo.WinForms/EasyDo.WinForms.csproj" />
+  </Folder>
+  <Folder Name="/EasyDo/Tests/">
+    <Project Path="EasyDo/Tests/EasyDo.Core.Specs/EasyDo.Core.Specs.csproj" />
+    <Project Path="EasyDo/Tests/StockFlow.Specs/StockFlow.Specs.csproj" />
+  </Folder>
+  <Folder Name="/EasyDo/Examples/">
+    <Project Path="EasyDo/Examples/TaskBoard/TaskBoard.csproj" />
+  </Folder>
 </Solution>

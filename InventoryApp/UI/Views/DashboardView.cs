@@ -1,4 +1,5 @@
 using InventoryApp.Data;
+using InventoryApp.Models;
 
 namespace InventoryApp.UI.Views;
 
@@ -7,63 +8,54 @@ public class DashboardView : UserControl, IRefreshable
     private readonly ProductRepository _products = new();
     private readonly SaleRepository _sales = new();
 
-    private readonly StatCard _cProducts = new("Товаров", Theme.Accent);
-    private readonly StatCard _cRevenue = new("Выручка сегодня", Theme.Success);
-    private readonly StatCard _cLow = new("Мало на складе", Theme.Danger);
-    private readonly StatCard _cSales = new("Продаж сегодня", Theme.Info);
+    private readonly StatCard _cProducts = new(AppStyle.Ui, "Товаров", AppStyle.Ui.Accent);
+    private readonly StatCard _cRevenue = new(AppStyle.Ui, "Выручка сегодня", AppStyle.Ui.Success);
+    private readonly StatCard _cLow = new(AppStyle.Ui, "Мало на складе", AppStyle.Ui.Danger);
+    private readonly StatCard _cSales = new(AppStyle.Ui, "Продаж сегодня", AppStyle.Ui.Info);
 
-    private readonly BarChart _chart = new();
-    private readonly DataGridView _recent = Theme.Grid();
-    private readonly DataGridView _low = Theme.Grid();
+    private readonly BarChart _chart = new(AppStyle.Ui);
+    private readonly DataGridView _recent = AppStyle.Ui.Grid();
+    private readonly DataGridView _low = AppStyle.Ui.Grid();
     private readonly Label _subtitle;
 
     public DashboardView()
     {
-        BackColor = Theme.Bg;
+        BackColor = AppStyle.Ui.Bg;
         DoubleBuffered = true;
 
-        var header = Theme.PageHeader("Обзор", "");
+        var header = AppStyle.Ui.PageHeader("Обзор", "");
         _subtitle = (Label)header.Controls[1];
 
-        var stats = Ui.Columns(new[] { 25f, 25f, 25f, 25f },
+        var stats = AppStyle.Ui.Columns(new[] { 25f, 25f, 25f, 25f },
             new Control[] { _cProducts, _cRevenue, _cLow, _cSales });
         stats.Dock = DockStyle.Top;
         stats.Height = 112;
 
-        _recent.Columns.AddRange(
-            Theme.Col("Id", "№ чека", 60),
-            Theme.Col("CreatedAt", "Дата и время", 120, "dd.MM.yyyy HH:mm"),
-            Theme.Col("ItemsCount", "Товаров", 60, right: true),
-            Theme.Col("Total", "Сумма, сом", 90, "N0", right: true));
+        _recent.Define<Sale>()
+            .Column(row => row.Id, "№ чека", 60)
+            .Column(row => row.CreatedAt, "Дата и время", 120, "dd.MM.yyyy HH:mm")
+            .Column(row => row.ItemsCount, "Товаров", 60, right: true)
+            .Column(row => row.Total, "Сумма, сом", 90, "N0", right: true).Apply();
 
-        _low.Columns.AddRange(
-            Theme.Col("Name", "Товар", 170),
-            Theme.Col("Quantity", "Ост.", 45, right: true),
-            Theme.Col("Status", "Статус", 85));
+        _low.Define<Product>()
+            .Column(row => row.Name, "Товар", 170)
+            .Column(row => row.Quantity, "Ост.", 45, right: true)
+            .Column(row => row.Status, "Статус", 85).Apply();
         _low.CellFormatting += (_, e) => Ui.ColorStatus(_low, e);
 
-        var chartCard = Theme.TitledCard("Выручка за 7 дней", _chart);
-        var recentCard = Theme.TitledCard("Последние продажи", _recent);
-        var lowCard = Theme.TitledCard("Заканчиваются на складе", _low);
+        var chartCard = AppStyle.Ui.TitledCard("Выручка за 7 дней", _chart);
+        var recentCard = AppStyle.Ui.TitledCard("Последние продажи", _recent);
+        var lowCard = AppStyle.Ui.TitledCard("Заканчиваются на складе", _low);
 
-        var bottom = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, BackColor = Theme.Bg };
-        bottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 62));
-        bottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38));
-        bottom.RowStyles.Add(new RowStyle(SizeType.Percent, 52));
-        bottom.RowStyles.Add(new RowStyle(SizeType.Percent, 48));
-        chartCard.Margin = new Padding(0, 0, 16, 16);
-        recentCard.Margin = new Padding(0, 0, 16, 0);
-        lowCard.Margin = Padding.Empty;
-        bottom.Controls.Add(chartCard, 0, 0);
-        bottom.Controls.Add(recentCard, 0, 1);
-        bottom.Controls.Add(lowCard, 1, 0);
-        bottom.SetRowSpan(lowCard, 2);
+        var bottom = AppStyle.Ui.Matrix(new[] { 62f, 38f }, new[] { 52f, 48f })
+            .Cell(chartCard, 0, 0, margin: new Padding(0, 0, 16, 16))
+            .Cell(recentCard, 0, 1, margin: new Padding(0, 0, 16, 0))
+            .Cell(lowCard, 1, 0, rowSpan: 2, margin: Padding.Empty).Build();
 
-        Controls.Add(bottom);
-        Controls.Add(Ui.Spacer(18));
-        Controls.Add(stats);
-        Controls.Add(header);
-        bottom.BringToFront();
+        AppStyle.Ui.Page(bottom)
+            .Above(AppStyle.Ui.Spacer(18))
+            .Above(stats)
+            .Above(header).Into(this);
     }
 
     public void RefreshData()
@@ -73,13 +65,13 @@ public class DashboardView : UserControl, IRefreshable
 
         var s = _sales.GetStats();
         _cProducts.Value = s.ProductsCount.ToString("N0");
-        _cProducts.Hint = $"{s.UnitsInStock:N0} ед. на {Theme.Money(s.StockValue)}";
-        _cRevenue.Value = Theme.Money(s.TodayRevenue);
-        _cRevenue.Hint = "прибыль: " + Theme.Money(s.TodayProfit);
+        _cProducts.Hint = $"{s.UnitsInStock:N0} ед. на {AppStyle.Ui.Money(s.StockValue)}";
+        _cRevenue.Value = AppStyle.Ui.Money(s.TodayRevenue);
+        _cRevenue.Hint = "прибыль: " + AppStyle.Ui.Money(s.TodayProfit);
         _cLow.Value = s.LowStockCount.ToString();
         _cLow.Hint = "требуют пополнения";
         _cSales.Value = s.TodaySales.ToString();
-        _cSales.Hint = s.TodaySales > 0 ? "средний чек: " + Theme.Money(s.TodayRevenue / s.TodaySales) : "чеков пока нет";
+        _cSales.Hint = s.TodaySales > 0 ? "средний чек: " + AppStyle.Ui.Money(s.TodayRevenue / s.TodaySales) : "чеков пока нет";
 
         _chart.SetData(_sales.GetRevenueByDay(7)
             .Select(d => (d.Day.Date == DateTime.Today ? "Сегодня" : d.Day.ToString("ddd, dd"), d.Total)));
