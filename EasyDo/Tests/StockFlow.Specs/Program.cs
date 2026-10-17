@@ -1,7 +1,9 @@
 using System.Globalization;
 using EasyDo;
 using EasyDo.WinForms;
-using InventoryApp.Models;
+using Inventory.Contracts;
+using InventoryApp.UI;
+using InventoryApp.UI.Dialogs;
 
 namespace StockFlow.Specs;
 
@@ -112,6 +114,14 @@ internal static class Program
         {
             var p = new Product { Name = "x", Sku = "x", Price = 1, Quantity = -1 };
             var error = Throws<RuleException>(() => ProductRules.Valid.Ensure(p)); Assert(error.Failures.Any(f => f.Key == nameof(Product.Quantity)));
+        });
+        Test("desktop assembly has no MySQL or storage reference; login masks password", () =>
+        {
+            var references = typeof(MainForm).Assembly.GetReferencedAssemblies().Select(a => a.Name).ToArray();
+            Assert(!references.Contains("MySqlConnector") && !references.Contains("Inventory.Storage"));
+            using var login = new LoginForm();
+            var field = (TextBox)typeof(LoginForm).GetField("_password", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(login);
+            Assert(field.UseSystemPasswordChar && login.Controls.OfType<TextBox>().Any(t => t.Text.StartsWith("https://")));
         });
 
         var baseline = Argument(args, "--baseline");

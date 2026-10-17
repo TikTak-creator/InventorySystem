@@ -1,7 +1,10 @@
 [CmdletBinding()]
 param(
     [string]$MySqlBase = 'C:/Program Files/MySQL/MySQL Server 8.4',
-    [ValidateRange(1024, 65535)][int]$Port = 33317
+    [ValidateRange(1024, 65535)][int]$Port = 33317,
+    [switch]$IncludeApi,
+    [string]$ApiSpecsPath,
+    [string]$ApiDotnetPath = 'dotnet'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -40,6 +43,11 @@ try {
     $testSettings | ConvertTo-Json -Depth 3 | Set-Content $settingsPath -Encoding utf8
     & dotnet $specs --mysql --settings $settingsPath
     if ($LASTEXITCODE -ne 0) { throw "Integration suite failed ($LASTEXITCODE)." }
+    if ($IncludeApi) {
+        $apiSpecs = if ($ApiSpecsPath) { (Resolve-Path -LiteralPath $ApiSpecsPath).Path } else { Join-Path $projectRoot 'tests/Inventory.Api.Specs/bin/Debug/net8.0/Inventory.Api.Specs.dll' }
+        & $ApiDotnetPath $apiSpecs --settings $settingsPath
+        if ($LASTEXITCODE -ne 0) { throw "HTTPS API suite failed ($LASTEXITCODE)." }
+    }
 } finally {
     if (-not $testServer.HasExited) {
         if ($ready) {

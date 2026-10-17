@@ -1,5 +1,14 @@
 <Solution>
   <Project Path="InventoryApp/InventoryApp.csproj" />
+  <Folder Name="/StockFlow/">
+    <Project Path="Inventory.Contracts/Inventory.Contracts.csproj" />
+    <Project Path="Inventory.Storage/Inventory.Storage.csproj" />
+    <Project Path="Inventory.Client/Inventory.Client.csproj" />
+    <Project Path="Inventory.Server/Inventory.Server.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Inventory.Api.Specs/Inventory.Api.Specs.csproj" />
+  </Folder>
   <Folder Name="/EasyDo/">
     <Project Path="EasyDo/EasyDo.Core/EasyDo.Core.csproj" />
     <Project Path="EasyDo/EasyDo.WinForms/EasyDo.WinForms.csproj" />

@@ -1,5 +1,7 @@
 # Устройство EasyDo
 
+Для StockFlow 2.0 сервер использует `Inventory.Storage → EasyDo.Core`, а клиент — `InventoryApp → EasyDo.WinForms`. Схема первоначальной прямой MySQL-интеграции ниже относится к сохранённой ветке `codex/easydo-baseline`. Актуальные границы проектов — [в портфолио](../docs/PORTFOLIO.md).
+
 ## Зависимости
 
 ```text

@@ -1,3 +1,3 @@
-namespace InventoryApp.Models;
+namespace Inventory.Contracts;
 
 public sealed record SaleReceipt(int Id, decimal Total);

@@ -1,5 +1,5 @@
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 
 namespace InventoryApp.UI.Views;
 

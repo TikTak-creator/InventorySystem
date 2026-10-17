@@ -4,5 +4,5 @@
     <ImplicitUsings>enable</ImplicitUsings><Nullable>disable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ApplicationHighDpiMode>DpiUnawareGdiScaled</ApplicationHighDpiMode>
   </PropertyGroup>
-  <ItemGroup><ProjectReference Include="../../../InventoryApp/InventoryApp.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="../../../InventoryApp/InventoryApp.csproj" /><ProjectReference Include="../../../Inventory.Storage/Inventory.Storage.csproj" /></ItemGroup>
 </Project>

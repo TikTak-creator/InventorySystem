@@ -5,3 +5,10 @@ publish/
 *.user
 
 .artifacts/
+*.pfx
+*.p12
+*.pem
+*.key
+.env
+.env.*
+appsettings.*.local.json

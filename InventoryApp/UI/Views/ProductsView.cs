@@ -1,5 +1,5 @@
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 using InventoryApp.UI.Dialogs;
 
 namespace InventoryApp.UI.Views;
@@ -30,6 +30,8 @@ public class ProductsView : UserControl, IRefreshable
         var edit = AppStyle.Ui.SecondaryBtn("Изменить");
         var stockIn = AppStyle.Ui.Btn("Приход", AppStyle.Ui.Success, 110);
         var delete = AppStyle.Ui.Btn("Удалить", AppStyle.Ui.Danger, 110);
+        add.Enabled = edit.Enabled = stockIn.Enabled = ApiSession.Current?.CanWrite ?? true;
+        delete.Enabled = ApiSession.Current?.CanDelete ?? true;
 
         add.OnClick(AddProduct);
         edit.OnClick(EditSelected);

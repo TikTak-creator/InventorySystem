@@ -1,5 +1,5 @@
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 
 namespace InventoryApp.UI.Dialogs;
 
@@ -116,7 +116,7 @@ public class ProductEditForm : Form
             !AppStyle.Ui.Confirm(this, "Цена продажи ниже закупочной. Сохранить всё равно?"))
             return;
 
-        Result = _binding.Save(new Product { Id = _original?.Id ?? 0 });
+        Result = _binding.Save(new Product { Id = _original?.Id ?? 0, UpdatedAt = _original?.UpdatedAt ?? default });
         var failures = ProductRules.Valid.Validate(Result);
         if (failures.Count > 0) { AppStyle.Ui.Warn(this, failures[0].Message); return; }
         DialogResult = DialogResult.OK;

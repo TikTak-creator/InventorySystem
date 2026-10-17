@@ -1,5 +1,5 @@
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 using InventoryApp.UI.Dialogs;
 
 namespace InventoryApp.UI.Views;
@@ -21,6 +21,7 @@ public class SalesView : UserControl, IRefreshable
         var show = AppStyle.Ui.SecondaryBtn("Показать", 110);
         var today = AppStyle.Ui.SecondaryBtn("Сегодня", 100);
         var newSale = AppStyle.Ui.Btn("+ Новая продажа", AppStyle.Ui.Accent, 170);
+        newSale.Enabled = ApiSession.Current?.CanWrite ?? true;
         show.OnClick(RefreshData);
         today.Click += (_, _) => { _from.Value = DateTime.Today; _to.Value = DateTime.Today; RefreshData(); };
         newSale.OnClick(NewSale);

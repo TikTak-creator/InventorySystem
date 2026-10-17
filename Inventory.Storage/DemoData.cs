@@ -1,4 +1,4 @@
-namespace InventoryApp.Data;
+namespace Inventory.Storage;
 
 internal static class DemoData
 {

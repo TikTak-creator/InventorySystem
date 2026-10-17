@@ -1,7 +1,7 @@
 using System.Text.Json;
 using EasyDo.Data;
-using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Storage;
+using Inventory.Contracts;
 using MySqlConnector;
 
 namespace StockFlow.Specs;
@@ -77,7 +77,7 @@ internal static class MySqlSpecs
             Program.Test("MySQL rejects invalid quantities before opening sale transaction", () =>
             {
                 Program.Throws<InvalidOperationException>(() => sales.CheckoutSale([new CartItem { Product = milk, Quantity = -1 }]));
-                Program.Throws<InvalidOperationException>(() => products.AddStock(milk.Id, 0));
+                Program.Throws<ArgumentException>(() => products.AddStock(milk.Id, 0));
                 Program.Assert(Reload(milk.Id).Quantity == 11);
             });
             Program.Test("MySQL item-write failure rolls back receipt and inventory", () =>
@@ -117,7 +117,7 @@ internal static class MySqlSpecs
             Program.Test("MySQL demo recipe preserves 16 products and week of sales; seed is idempotent", () =>
             {
                 store.Run(s => { s.Execute(Sql.TextOnly("DELETE FROM sales")); s.Execute(Sql.TextOnly("DELETE FROM products")); });
-                var demo = typeof(Database).Assembly.GetType("InventoryApp.Data.DemoData", true).GetMethod("Seed");
+                var demo = typeof(Database).Assembly.GetType("Inventory.Storage.DemoData", true).GetMethod("Seed");
                 demo.Invoke(null, [store]); var count = SalesCount(); demo.Invoke(null, [store]);
                 Program.Assert(products.GetAll().Count == 16 && count > 0 && count == SalesCount() && sales.GetRevenueByDay(7).Count == 7);
             });

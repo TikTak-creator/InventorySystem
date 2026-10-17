@@ -1,4 +1,5 @@
 using InventoryApp.UI.Views;
+using InventoryApp.Data;
 
 namespace InventoryApp.UI;
 
@@ -87,12 +88,15 @@ public class MainForm : Form
             using var b = new SolidBrush(AppStyle.Ui.Success);
             e.Graphics.FillEllipse(b, 8, 21, 9, 9);
         };
-        var status = AppStyle.Ui.Label("MySQL подключена", AppStyle.Ui.Small, AppStyle.Ui.Muted);
+        var status = AppStyle.Ui.Label("Сервер подключён", AppStyle.Ui.Small, AppStyle.Ui.Muted);
         status.Location = new Point(24, 16);
         var hint = AppStyle.Ui.Label("F5 — обновить", new Font("Segoe UI", 8f), Color.FromArgb(90, 96, 120));
         hint.Location = new Point(24, 34);
         footer.Controls.Add(status);
         footer.Controls.Add(hint);
+        var logout = AppStyle.Ui.SecondaryBtn("Выйти", 72);
+        logout.Height = 27; logout.Location = new Point(130, 16);
+        logout.OnClick(Close); footer.Controls.Add(logout);
 
         sidebar.Controls.Add(nav);
         sidebar.Controls.Add(footer);

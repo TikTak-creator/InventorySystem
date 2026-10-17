@@ -1,4 +1,4 @@
-namespace InventoryApp.Data;
+namespace Inventory.Storage;
 
 internal static class StockSchema
 {
@@ -45,7 +45,17 @@ internal static class StockSchema
             new_price  DECIMAL(12,2) NOT NULL,
             changed_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
             CONSTRAINT fk_price_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+        """
+        CREATE TABLE IF NOT EXISTS sale_requests (
+            user_id INT NOT NULL,
+            request_key CHAR(36) NOT NULL,
+            request_hash CHAR(64) NOT NULL,
+            sale_id INT NULL,
+            PRIMARY KEY (user_id, request_key),
+            FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """
     };
 
 }

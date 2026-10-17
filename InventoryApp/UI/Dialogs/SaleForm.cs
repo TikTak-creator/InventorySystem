@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 using InventoryApp.UI.Views;
 
 namespace InventoryApp.UI.Dialogs;
@@ -21,6 +21,7 @@ public class SaleForm : Form
 
     public int SaleId { get; private set; }
     public decimal SaleTotal { get; private set; }
+    private string _requestKey = Guid.NewGuid().ToString("D");
 
     public SaleForm()
     {
@@ -180,6 +181,7 @@ public class SaleForm : Form
 
     private void UpdateTotal()
     {
+        _requestKey = Guid.NewGuid().ToString("D");
         var total = _cart.Sum(c => c.Sum);
         _total.Text = AppStyle.Ui.Money(total);
         _count.Text = _cart.Count == 0
@@ -192,7 +194,7 @@ public class SaleForm : Form
         if (_cart.Count == 0) { AppStyle.Ui.Warn(this, "Добавьте товары в корзину."); return; }
         try
         {
-            var receipt = _sales.CheckoutSale(_cart.ToList());
+            var receipt = _sales.CheckoutSale(_cart.ToList(), _requestKey);
             SaleTotal = receipt.Total;
             SaleId = receipt.Id;
             DialogResult = DialogResult.OK;

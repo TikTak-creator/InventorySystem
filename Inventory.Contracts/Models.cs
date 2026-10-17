@@ -1,4 +1,4 @@
-namespace InventoryApp.Models;
+namespace Inventory.Contracts;
 
 public class Product
 {

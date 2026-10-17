@@ -14,13 +14,14 @@ internal static class VisualParity
         var context = new AssemblyLoadContext("original-stockflow", isCollectible: true);
         var original = context.LoadFromAssemblyPath(Path.GetFullPath(baselinePath));
         var current = typeof(MainForm).Assembly;
-        Program.Test("database DDL matches the original with normalized line endings", () =>
+        Program.Test("original business tables retain their schema", () =>
         {
             var oldSchema = (string[])original.GetType("InventoryApp.Data.Database", true).GetField("Schema").GetValue(null);
             Program.Assert(oldSchema.Select(sql => sql.Replace("\r\n", "\n"))
-                .SequenceEqual(InventoryApp.Data.Database.Schema.Select(sql => sql.Replace("\r\n", "\n"))));
+                .SequenceEqual(Inventory.Storage.Database.Schema.Take(oldSchema.Length).Select(sql => sql.Replace("\r\n", "\n"))));
         });
-        var screens = new[] { "UI.MainForm", "UI.Views.DashboardView", "UI.Views.ProductsView", "UI.Views.SalesView", "UI.Views.StockView",
+        // MainForm intentionally gains API status/logout; LoginForm is a new screen.
+        var screens = new[] { "UI.Views.DashboardView", "UI.Views.ProductsView", "UI.Views.SalesView", "UI.Views.StockView",
             "UI.Dialogs.ProductEditForm", "UI.Dialogs.SaleForm", "UI.Dialogs.QuantityDialog" };
         foreach (var name in screens)
         {
@@ -51,7 +52,7 @@ internal static class VisualParity
         var type = assembly.GetType("InventoryApp." + name, throwOnError: true);
         if (name.EndsWith("ProductEditForm"))
         {
-            var product = Activator.CreateInstance(assembly.GetType("InventoryApp.Models.Product", true));
+            var product = Activator.CreateInstance(type.GetConstructors().Single().GetParameters()[0].ParameterType);
             foreach (var (key, value) in new (string, object)[] { ("Id", 1), ("Sku", "PRD-001"), ("Name", "Молоко «Ак-Сүт» 3,2% 1 л"),
                 ("Category", "Молочные"), ("PurchasePrice", 62m), ("Price", 79m), ("Quantity", 48), ("MinQuantity", 10) })
                 product.GetType().GetProperty(key).SetValue(product, value);

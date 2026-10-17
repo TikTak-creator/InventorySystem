@@ -1,5 +1,5 @@
 using InventoryApp.Data;
-using InventoryApp.Models;
+using Inventory.Contracts;
 using InventoryApp.UI.Dialogs;
 
 namespace InventoryApp.UI.Views;
@@ -32,6 +32,7 @@ public class StockView : UserControl, IRefreshable
         stats.Height = 112;
 
         var stockIn = AppStyle.Ui.Btn("+ Приход", AppStyle.Ui.Success, 120);
+        stockIn.Enabled = ApiSession.Current?.CanWrite ?? true;
         stockIn.OnClick(StockIn);
         _lowOnly.CheckedChanged += (_, _) => RefreshData();
         var toolbar = AppStyle.Ui.Toolbar(new Control[] { _lowOnly }, new Control[] { stockIn }, 44);
