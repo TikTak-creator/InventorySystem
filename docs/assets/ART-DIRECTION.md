@@ -1,10 +1,10 @@
 # StockFlow · Jujutsu Kaisen README cover
 
-Asset: [stockflow-jjk-hero.png](stockflow-jjk-hero.png), 2048 × 768 PNG. Created specifically for this repository using the built-in `image_gen` tool. The source output was copied into this folder; the README does not depend on a temporary path or a remote anime image host.
+Asset: [stockflow-jjk-hero.png](stockflow-jjk-hero.png), 2048 × 768 PNG. The current cover is the user-edited artwork supplied as `Мрачный аниме-баннер Stockflow.png`, copied unchanged into this folder. The original cover was created specifically for this repository using the built-in `image_gen` tool. The README does not depend on a temporary path or a remote anime image host.
 
 Visual direction: unofficial Jujutsu Kaisen fan art, Yuji Itadori, Aoi Todo, Suguru Geto and Satoru Gojo; near-black canvas, crimson and violet energy, restrained central software title. The cover is decorative and does not represent application UI.
 
-## Generation prompt
+## Original generation prompt
 
 ```text
 Use case: stylized-concept.
