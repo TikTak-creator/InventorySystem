@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="docs/assets/stockflow-jjk-hero.png" width="100%" alt="StockFlow — баннер в стиле Jujutsu Kaisen: Юджи Итадори, Аой Тодо, Сугуру Гето и Сатору Годжо" />
+<img src="docs/assets/stockflow-jjk-hero.png" width="100%" alt="StockFlow — Jujutsu Kaisen fan-art banner with Yuji Itadori, Aoi Todo, Suguru Geto and Satoru Gojo" />
 
 # STOCKFLOW
 
-**Порядок в товарах. Контроль над остатками. Одна система для магазина и интеграций.**
+**Organize your products. Track your stock. One system for your store and integrations.**
 
 <img alt="Source version 2.0" src="https://img.shields.io/badge/SOURCE-v2.0-F02549?style=flat-square" />
 <img alt="C sharp" src="https://img.shields.io/badge/C%23-9F6AFF?style=flat-square" />
@@ -13,118 +13,119 @@
 <img alt="MySQL 8" src="https://img.shields.io/badge/MySQL-8-4479A1?style=flat-square" />
 <img alt="EasyDo blocks" src="https://img.shields.io/badge/EasyDo-COMPOSABLE-F02549?style=flat-square" />
 
-<p><a href="#users">Пользователям</a> &nbsp;·&nbsp; <a href="#developers">Разработчикам</a> &nbsp;·&nbsp; <a href="#easydo">EasyDo в коде</a> &nbsp;·&nbsp; <a href="#api">API</a> &nbsp;·&nbsp; <a href="#roadmap">Планы</a> &nbsp;·&nbsp; <a href="docs/PORTFOLIO.md">Portfolio · DE</a></p>
+<p><strong>English</strong> &nbsp;|&nbsp; <a href="readme_ru.md">Русский</a></p>
+<p><a href="#users">For users</a> &nbsp;·&nbsp; <a href="#developers">For developers</a> &nbsp;·&nbsp; <a href="#easydo">EasyDo in practice</a> &nbsp;·&nbsp; <a href="#api">API</a> &nbsp;·&nbsp; <a href="#roadmap">Roadmap</a> &nbsp;·&nbsp; <a href="docs/PORTFOLIO.md">Portfolio · DE</a></p>
 
 </div>
 
 ---
 
 > **DOMAIN: INVENTORY**<br />
-> StockFlow — система учёта для небольшого магазина: товары, цены, приход, продажи и отчёты. Windows-клиент и внешние программы работают через общий защищённый сервер. Данные хранятся в MySQL, а повторяющийся код собирается из собственных блоков **EasyDo**.
+> StockFlow is an inventory application for a small store: products, prices, stock receipts, sales and reports. The Windows client and external applications use the same secure server. MySQL stores the data, while reusable **EasyDo** blocks handle repetitive implementation work.
 
 <table>
 <tr>
 <td width="50%" valign="top">
-<h3>Хочу пользоваться</h3>
-<p>Посмотреть интерфейс, понять возможности, подключиться к серверу и начать работу.</p>
-<a href="#users"><strong>Открыть руководство пользователя →</strong></a>
+<h3>I want to use it</h3>
+<p>Explore the interface, learn what it does, connect to a server and get started.</p>
+<a href="#users"><strong>Open the user guide →</strong></a>
 </td>
 <td width="50%" valign="top">
-<h3>Хочу разрабатывать</h3>
-<p>Собрать проект, изучить архитектуру, подключить API или добавить свой сценарий.</p>
-<a href="#developers"><strong>Открыть руководство разработчика →</strong></a>
+<h3>I want to develop it</h3>
+<p>Build the project, explore the architecture, integrate the API or add a workflow.</p>
+<a href="#developers"><strong>Open the developer guide →</strong></a>
 </td>
 </tr>
 </table>
 
 <a id="users"></a>
 
-## 01 / Магазин под контролем
+## 01 / Your store at a glance
 
-| Раздел | Что уже работает |
+| Area | Available features |
 | :--- | :--- |
-| **Обзор** | Выручка и прибыль за день, количество чеков, средний чек, график за 7 дней и товары, требующие пополнения |
-| **Товары** | Каталог, поиск по названию/артикулу/категории, фильтры, добавление и редактирование |
-| **Склад** | Остатки, минимальные пороги, статусы наличия, приход, стоимость склада и история цен |
-| **Продажи** | Касса с корзиной, проверка остатков, чек и его состав, история за период |
-| **Доступ** | Вход на сервер, роли пользователей, ограничение действий и отзыв сессий |
-| **Интеграции** | HTTPS API, OpenAPI и C#-клиент для внешних программ |
+| **Dashboard** | Daily revenue and profit, receipt count, average sale, a seven-day chart and products that need restocking |
+| **Products** | Catalog, search by name/SKU/category, filters, product creation and editing |
+| **Stock** | Quantities, minimum levels, availability status, stock receipts, inventory value and price history |
+| **Sales** | Checkout with a cart, stock validation, receipts and their line items, sales history by date |
+| **Access** | Server login, user roles, action permissions and session revocation |
+| **Integrations** | HTTPS API, OpenAPI and a C# client for external applications |
 
-Чек сохраняет название, цену и себестоимость на момент продажи. Изменение карточки или удаление товара не меняет историю продаж. Повтор одного запроса продажи не создаёт второй чек, а устаревшая открытая карточка не перезаписывает новый остаток.
+Receipts preserve the product name, price and cost at the time of sale. Editing or deleting a product does not change sales history. Retrying the same sale request does not create a second receipt, and saving a stale product form cannot overwrite newer stock data.
 
-### Интерфейс
+### Interface
 
 <details open>
-<summary><strong>Развернуть галерею рабочих экранов</strong></summary>
+<summary><strong>Explore the application screens</strong></summary>
 
-| Обзор магазина | Каталог товаров |
+| Store dashboard | Product catalog |
 | :---: | :---: |
-| ![StockFlow: обзор магазина](screenshots/MainForm.png) | ![StockFlow: каталог товаров](screenshots/ProductsView.png) |
-| **Касса и корзина** | **Склад и история цен** |
-| ![StockFlow: оформление продажи](screenshots/SaleForm.png) | ![StockFlow: склад и история цен](screenshots/StockView.png) |
+| ![StockFlow dashboard](screenshots/MainForm.png) | ![StockFlow product catalog](screenshots/ProductsView.png) |
+| **Checkout and cart** | **Stock and price history** |
+| ![StockFlow checkout](screenshots/SaleForm.png) | ![StockFlow stock and price history](screenshots/StockView.png) |
 
-<sub>Скриншоты рабочих разделов сохранены из исходной версии. В 2.0 добавлены вход на сервер, статус подключения и выход; основное оформление разделов сохранено.</sub>
+<sub>These screenshots show the original application screens. Version 2.0 adds server login, connection status and logout while preserving the main screen designs. The application interface is in Russian; this README is available in English and Russian.</sub>
 
 </details>
 
-### Подключиться и начать
+### Connect and get started
 
-1. Получите у администратора адрес сервера, свою учётную запись и сборку Windows-клиента.
-2. Запустите `StockFlow.exe` и укажите HTTPS-адрес, например `https://localhost:7071` для локального сервера.
-3. Введите логин и пароль. После входа откроются **Обзор**, **Товары**, **Продажи** и **Склад**.
-4. Работайте в рамках своей роли. Кнопка **«Выйти»** закрывает клиент и пытается отозвать сессию на сервере.
+1. Ask your administrator for the server address, your account and a Windows client build.
+2. Start `StockFlow.exe` and enter the HTTPS address, such as `https://localhost:7071` for a local server.
+3. Enter your username and password. After login, the Dashboard, Products, Sales and Stock sections become available.
+4. Use the features allowed by your role. The **«Выйти» (Log out)** button closes the client and attempts to revoke the server session.
 
-Пароль MySQL пользователю не нужен. Пароль входа и токен не сохраняются в клиентском конфигурационном файле. Для запуска из исходников — [раздел разработчика](#developers).
+Users do not need a MySQL password. The login password and session token are not saved in the client configuration file. To run from source, see the [developer guide](#developers).
 
-| Роль | Читать данные и отчёты | Товары, приход и продажи | Удалять товары | Управлять пользователями |
+| Role | Read data and reports | Products, stock receipts and sales | Delete products | Manage users |
 | :--- | :---: | :---: | :---: | :---: |
 | **Viewer** | ✓ | — | — | — |
 | **Operator** | ✓ | ✓ | — | — |
 | **Admin** | ✓ | ✓ | ✓ | ✓ |
 
-<sub>Чтение включает закупочные цены и показатели прибыли. Это общий доступ одного магазина, без разделения по организациям.</sub>
+<sub>Read access includes purchase costs and profit figures. Access is shared within one store; there is no organization-level separation.</sub>
 
 <details>
-<summary><strong>Горячие клавиши и частые вопросы</strong></summary>
+<summary><strong>Keyboard shortcuts and common questions</strong></summary>
 
-| Клавиша | Действие |
+| Key | Action |
 | :--- | :--- |
-| `F5` | Обновить текущий раздел |
-| `Enter` / двойной клик | Открыть товар для редактирования |
-| `Delete` | Удалить товар или убрать позицию из корзины — в зависимости от окна и прав |
-| `F2` | Оформить продажу в окне кассы |
+| `F5` | Refresh the current section |
+| `Enter` / double-click | Open a product for editing |
+| `Delete` | Delete a product or remove a cart item, depending on the window and permissions |
+| `F2` | Complete a sale in the checkout window |
 
-**Не удаётся войти?** Проверьте адрес и запуск сервера, учётные данные и доверие HTTPS-сертификату. После нескольких неудачных попыток действует временная блокировка.
+**Cannot log in?** Check the address, server availability, credentials and HTTPS certificate trust. Repeated failed attempts trigger a temporary account lockout.
 
-**Сессия закончилась?** Закройте клиент и войдите заново. Пароль по умолчанию отсутствует; учётную запись выдаёт администратор.
+**Session expired?** Close the client and log in again. There is no default password; your administrator creates your account.
 
-**Товар изменился во время редактирования?** Обновите список и повторно откройте карточку. Сервер защищает более свежие данные от перезаписи.
+**Product changed while you were editing?** Refresh the list and reopen the product. The server prevents stale forms from overwriting newer data.
 
-**Откуда берётся прибыль?** Из суммы `количество × (цена продажи − себестоимость)` по позициям чека. Операционные расходы и налоги в эту величину не входят.
+**How is profit calculated?** The sum of `quantity × (sale price − cost)` for the receipt items. This figure excludes operating expenses and taxes.
 
 </details>
 
 <a id="developers"></a>
 
-## 02 / Под капотом
+## 02 / Under the hood
 
-### Стек и границы проектов
+### Stack and project boundaries
 
-| Компонент | На чём написан | За что отвечает |
+| Component | Built with | Responsibility |
 | :--- | :--- | :--- |
-| **InventoryApp** | C# · .NET 8 · WinForms | Windows-интерфейс и вход на сервер |
-| **Inventory.Server** | C# · ASP.NET Core 8 | HTTPS API, вход, роли, сессии и ограничения запросов |
-| **Inventory.Storage** | C# · MySqlConnector · ADO.NET | Репозитории, блокировки, транзакции и схема MySQL |
-| **Inventory.Contracts** | C# · .NET 8 | Общие модели, DTO и правила товара |
-| **Inventory.Client** | C# · HttpClient | Асинхронный SDK для клиента и внешних программ |
-| **EasyDo.Core** | C# · стандартная библиотека .NET | Сценарии, проверки, SQL-параметры и время жизни ресурсов |
-| **EasyDo.WinForms** | C# · WinForms | Контролы, типизированные таблицы, формы и компоновка |
+| **InventoryApp** | C# · .NET 8 · WinForms | Windows interface and server login |
+| **Inventory.Server** | C# · ASP.NET Core 8 | HTTPS API, login, roles, sessions and rate limits |
+| **Inventory.Storage** | C# · MySqlConnector · ADO.NET | Repositories, locks, transactions and MySQL schema |
+| **Inventory.Contracts** | C# · .NET 8 | Shared models, DTOs and product rules |
+| **Inventory.Client** | C# · HttpClient | Asynchronous SDK for the desktop client and external applications |
+| **EasyDo.Core** | C# · .NET standard library | Workflows, validation, SQL parameters and resource lifetimes |
+| **EasyDo.WinForms** | C# · WinForms | Controls, typed grids, forms and layout |
 
 ```mermaid
 flowchart LR
-    UI["Windows-клиент<br/>InventoryApp"] -->|HTTPS · JSON · Bearer| API["Сервер<br/>Inventory.Server"]
-    EXT["Внешняя программа<br/>HTTP / C# SDK"] -->|HTTPS · JSON · Bearer| API
-    API --> DATA["Inventory.Storage<br/>EasyDo · репозитории"]
+    UI["Windows client<br/>InventoryApp"] -->|HTTPS · JSON · Bearer| API["Server<br/>Inventory.Server"]
+    EXT["External application<br/>HTTP / C# SDK"] -->|HTTPS · JSON · Bearer| API
+    API --> DATA["Inventory.Storage<br/>EasyDo · repositories"]
     DATA -->|MySqlConnector · TLS| DB[(MySQL)]
 
     classDef client fill:#181321,stroke:#9F6AFF,color:#ffffff;
@@ -135,20 +136,20 @@ flowchart LR
     class DATA,DB storage;
 ```
 
-Только сервер знает строку подключения к MySQL. Клиент не содержит MySQL-драйвера и обращается к тем же операциям API, что и сторонние программы. Сервер и Core не зависят от WinForms; настольный интерфейс работает на Windows.
+Only the server knows the MySQL connection string. The client has no MySQL driver and uses the same API operations as external applications. The server and Core library do not depend on WinForms; the desktop interface runs on Windows.
 
-### Локальная сборка и запуск
+### Build and run locally
 
-**Подготовьте окружение:**
+**Requirements:**
 
-- Windows — для сборки и запуска полного решения с WinForms; сервер можно собирать отдельно на других поддерживаемых .NET платформах.
-- **SDK .NET 9.0.200+** — для файла решения `.slnx`; целевая платформа приложений — **.NET 8**. С SDK 8 собирайте отдельные `.csproj`. [О поддержке SLNX](https://devblogs.microsoft.com/dotnet/introducing-slnx-support-dotnet-cli/).
-- **ASP.NET Core 8 Runtime** для сервера и **.NET Desktop 8 Runtime** для клиента.
-- **MySQL 8** и учётную запись БД для инициализации. Рабочие права серверной учётной записи ограничиваются отдельно.
+- Windows to build and run the full solution with WinForms. The server can be built separately on other platforms supported by .NET.
+- **.NET SDK 9.0.200+** for the `.slnx` solution file; the applications target **.NET 8**. With SDK 8, build individual `.csproj` files. [SLNX support](https://devblogs.microsoft.com/dotnet/introducing-slnx-support-dotnet-cli/).
+- **ASP.NET Core 8 Runtime** for the server and **.NET Desktop 8 Runtime** for the client.
+- **MySQL 8** and a database account for initialization. Restrict the server account's production permissions separately.
 
-Проверьте установленные runtimes: `dotnet --list-runtimes`. Используйте актуальные исправления. Все команды ниже — из корня репозитория.
+Check installed runtimes with `dotnet --list-runtimes` and use current patches. Run the following commands from the repository root.
 
-**1. Соберите проект**
+**1. Build the solution**
 
 ```powershell
 dotnet restore InventorySystem.slnx
@@ -156,50 +157,50 @@ dotnet build InventorySystem.slnx -c Release
 dotnet dev-certs https --trust
 ```
 
-**2. Настройте сервер и создайте администратора**
+**2. Configure the server and create an administrator**
 
 ```powershell
 $env:ASPNETCORE_ENVIRONMENT = "Development"
-$env:ConnectionStrings__Default = Read-Host "Строка подключения MySQL"
+$env:ConnectionStrings__Default = Read-Host "MySQL connection string"
 $env:Database__CreateDatabase = "true"
 
 dotnet run --project Inventory.Server -- init-db
 dotnet run --project Inventory.Server -- create-user
 ```
 
-Форма строки подключения: `Server=localhost;Port=3306;Database=inventory_db;User ID=stockflow;Password=<ваш пароль>;SslMode=Required;`. Введите её локально. Если база уже существует и у учётной записи нет права её создания, используйте `Database__CreateDatabase=false`.
+Connection string format: `Server=localhost;Port=3306;Database=inventory_db;User ID=stockflow;Password=<your password>;SslMode=Required;`. Enter it locally. If the database already exists and the account cannot create databases, use `Database__CreateDatabase=false`.
 
-`create-user` спросит логин, роль и пароль; для первого пользователя выберите **Admin**. Общего стартового пароля нет. Демо-данные включаются отдельно через `Database__SeedDemoData=true` и по умолчанию выключены.
+`create-user` prompts for a username, role and password. Choose **Admin** for the first user. There is no shared initial password. Demo data is opt-in through `Database__SeedDemoData=true` and disabled by default.
 
-**3. Запустите обе части**
+**3. Start both applications**
 
 ```powershell
-# Терминал сервера, с теми же переменными окружения
+# Server terminal, with the same environment variables
 $env:Database__CreateDatabase = "false"
 dotnet run --project Inventory.Server
 ```
 
 ```powershell
-# Другой терминал: Windows-клиент
+# A separate terminal: Windows client
 dotnet run --project InventoryApp
 ```
 
-В окне входа укажите `https://localhost:7071` и созданную учётную запись.
+Enter `https://localhost:7071` and the account you created in the login window.
 
 > [!IMPORTANT]
-> Это конфигурация локальной разработки. Для рабочего сервера нужны доверенный HTTPS-сертификат, защищённое хранение секретов и MySQL-подключение с `SslMode=VerifyFull`. Пошаговая настройка — в [SETUP.md](docs/SETUP.md).
+> This is a local development configuration. A production server requires a trusted HTTPS certificate, secure secret storage and a MySQL connection with `SslMode=VerifyFull`. See [SETUP.md](docs/SETUP.md) for the full instructions.
 
 <details>
-<summary><strong>Отдельные сборки, публикация и структура репозитория</strong></summary>
+<summary><strong>Separate builds, publishing and repository layout</strong></summary>
 
-С SDK .NET 8 можно собрать сервер и клиент по отдельности:
+With .NET SDK 8, build the server and client separately:
 
 ```powershell
 dotnet build Inventory.Server/Inventory.Server.csproj
 dotnet build InventoryApp/InventoryApp.csproj
 ```
 
-Раздельные публикации:
+Publish to separate directories:
 
 ```powershell
 dotnet publish Inventory.Server -c Release -o publish/server
@@ -208,25 +209,25 @@ dotnet publish InventoryApp -c Release -r win-x64 --self-contained false -o publ
 
 ```text
 InventorySystem/
-├── InventoryApp/           # WinForms-клиент
-├── Inventory.Server/       # Сервер и OpenAPI
-├── Inventory.Storage/      # SQL, репозитории, схема и демо
-├── Inventory.Contracts/    # Модели и DTO
-├── Inventory.Client/       # Переносимый C# SDK
-├── EasyDo/                 # Библиотека, примеры и базовые тесты
-├── tests/                  # HTTPS/API-интеграция
-├── database/               # SQL для ручного развёртывания
-├── docs/                   # Руководства, портфолио и графика
-└── scripts/                # Генератор OpenAPI
+├── InventoryApp/           # WinForms client
+├── Inventory.Server/       # Server and OpenAPI
+├── Inventory.Storage/      # SQL, repositories, schema and demo data
+├── Inventory.Contracts/    # Models and DTOs
+├── Inventory.Client/       # Portable C# SDK
+├── EasyDo/                 # Libraries, examples and core tests
+├── tests/                  # HTTPS/API integration
+├── database/               # SQL for manual deployment
+├── docs/                   # Guides, portfolio and artwork
+└── scripts/                # OpenAPI generator
 ```
 
 </details>
 
 <a id="easydo"></a>
 
-## 03 / EasyDo — собрать как LEGO
+## 03 / EasyDo — build it like LEGO
 
-EasyDo убирает повторяющуюся техническую работу. Правила магазина остаются явными, а соединения, транзакции, шаги и интерфейс собираются из переиспользуемых блоков.
+EasyDo removes repetitive implementation work. Store rules remain explicit, while connections, transactions, workflow steps and interfaces are composed from reusable blocks.
 
 ```csharp
 // Inventory.Storage/SaleRepository.cs
@@ -236,32 +237,32 @@ private static readonly Flow<Checkout> SaleRecipe = Flow<Checkout>.Start()
     .Then(SaveItemsAndDeductStock);
 ```
 
-Эта цепочка выполняется **в одной транзакции**. Ошибка на любом шаге откатывает запись чека и списание товара.
+This pipeline runs **inside one transaction**. An error at any step rolls back both the receipt and the stock deduction.
 
-| Блок | Где применяется |
+| Block | Used in |
 | :--- | :--- |
-| `Flow` | [Шаги продажи](Inventory.Storage/SaleRepository.cs) |
-| `Store`, `Session`, `Sql` | [Товары и транзакции](Inventory.Storage/ProductRepository.cs), [учётные записи](Inventory.Server/Security/UserStore.cs) |
-| `Rules` | [Проверки модели товара](Inventory.Contracts/ProductRules.cs) |
-| `GridRecipe`, `Matrix`, `UiKit` | [Таблицы и компоновка обзора](InventoryApp/UI/Views/DashboardView.cs) |
-| `FormBinding` | [Загрузка и сохранение полей карточки](InventoryApp/UI/Dialogs/ProductEditForm.cs) |
-| `ViewDeck` | [Навигация и время жизни страниц](InventoryApp/UI/MainForm.cs) |
+| `Flow` | [Sale workflow](Inventory.Storage/SaleRepository.cs) |
+| `Store`, `Session`, `Sql` | [Products and transactions](Inventory.Storage/ProductRepository.cs), [user accounts](Inventory.Server/Security/UserStore.cs) |
+| `Rules` | [Product validation](Inventory.Contracts/ProductRules.cs) |
+| `GridRecipe`, `Matrix`, `UiKit` | [Dashboard grids and layout](InventoryApp/UI/Views/DashboardView.cs) |
+| `FormBinding` | [Loading and saving product fields](InventoryApp/UI/Dialogs/ProductEditForm.cs) |
+| `ViewDeck` | [Navigation and page lifetimes](InventoryApp/UI/MainForm.cs) |
 
-**Попробовать другую идею на тех же блоках:**
+**Try the same blocks in a different application:**
 
 ```powershell
 dotnet run --project EasyDo/Examples/TaskBoard
 ```
 
-TaskBoard — отдельная доска задач без зависимости от складской логики. [Руководство EasyDo](EasyDo/README.md) · [Архитектура и расширение](EasyDo/ARCHITECTURE.md).
+TaskBoard is an independent task board with no inventory-specific dependency. [EasyDo guide](EasyDo/README.md) · [Architecture and extension points](EasyDo/ARCHITECTURE.md).
 
 <a id="api"></a>
 
-## 04 / Подключить внешнюю программу
+## 04 / Connect an external application
 
-**24 операции · JSON · OpenAPI 3.0 · HTTPS · отзываемые Bearer-сессии**
+**24 operations · JSON · OpenAPI 3.0 · HTTPS · revocable Bearer sessions**
 
-API охватывает товары, категории, приход, продажи, историю цен, отчёты и управление пользователями. Права проверяются сервером на каждом запросе.
+The API covers products, categories, stock receipts, sales, price history, reports and user management. The server checks permissions on every request.
 
 ```csharp
 using Inventory.Client;
@@ -276,87 +277,87 @@ var products = await api.GetAsync<List<Product>>(
 await api.LogoutAsync(cancellationToken);
 ```
 
-Для нового клиента подключите [Inventory.Client.csproj](Inventory.Client/Inventory.Client.csproj). Все операции можно вызывать и обычным HTTP-клиентом.
+Reference [Inventory.Client.csproj](Inventory.Client/Inventory.Client.csproj) from your application, or call the operations with a standard HTTP client.
 
-| Документ | Что внутри |
+| Document | Contents |
 | :--- | :--- |
-| [API.md](docs/API.md) | Вход, роли, endpoints, ограничения, ошибки, C# и PowerShell |
-| [openapi.json](Inventory.Server/openapi.json) | Машиночитаемый контракт для интеграций |
-| [SETUP.md](docs/SETUP.md) | Запуск, пользователи, сертификаты, Production и обновление базы |
+| [API.md](docs/API.md) | Login, roles, endpoints, limits, errors, C# and PowerShell examples |
+| [openapi.json](Inventory.Server/openapi.json) | Machine-readable integration contract |
+| [SETUP.md](docs/SETUP.md) | Startup, users, certificates, production and database updates |
 
 > [!NOTE]
-> Продажа требует `Idempotency-Key`: при потере ответа повторяйте **тот же ключ и ту же корзину**. Сервер вернёт исходный чек без повторного списания. Цены и себестоимость определяет сервер.
+> Sales require an `Idempotency-Key`. If the response is lost, retry with **the same key and the same cart**. The server returns the original receipt without deducting stock again. The server determines prices and costs.
 
-## 05 / Защита и проверяемость
+## 05 / Security and verification
 
-| Механизм | Что делает |
+| Mechanism | Purpose |
 | :--- | :--- |
-| **HTTPS / TLS 1.2–1.3** | Защищает передачу; клиент проверяет сертификат сервера |
-| **PBKDF2 с солью** | Хранит пароль как стандартный IdentityV3-хэш, 600000 итераций |
-| **Случайные сессии** | Токен хранится в БД только как SHA-256-хэш; доступ можно отозвать |
-| **Серверные роли** | Разделяют чтение, работу с товарами и управление доступом |
-| **Защита входа** | Ограничивает запросы и временно блокирует аккаунт после ошибок |
-| **Транзакции и блокировки** | Сохраняют чек и остатки согласованно при конкурентных продажах |
-| **Версия карточки** | Не позволяет старой форме перезаписать более свежие изменения |
+| **HTTPS / TLS 1.2–1.3** | Protects data in transit; the client validates the server certificate |
+| **Salted PBKDF2** | Stores passwords as standard IdentityV3 hashes with 600,000 iterations |
+| **Random sessions** | Stores only the token's SHA-256 hash in the database; access can be revoked |
+| **Server-side roles** | Separate read access, inventory operations and access management |
+| **Login protection** | Rate limits requests and temporarily locks accounts after failures |
+| **Transactions and locks** | Keep receipts and stock consistent during concurrent sales |
+| **Product version checks** | Prevent stale forms from overwriting newer changes |
 
-Секреты базы отсутствуют в конфигурации клиента. Границы защиты, хранение данных на диске, требования к сертификатам и резервным копиям описаны в [SECURITY.md](docs/SECURITY.md).
+Database secrets are absent from the client configuration. See [SECURITY.md](docs/SECURITY.md) for protection boundaries, data at rest, certificates and backups.
 
 ```powershell
-# Ядро и WinForms
+# Core and WinForms
 dotnet run --project EasyDo/Tests/EasyDo.Core.Specs
 dotnet run --project EasyDo/Tests/StockFlow.Specs
 
-# Настоящие MySQL и HTTPS, только временные тестовые базы
+# Real MySQL and HTTPS; temporary test databases only
 ./EasyDo/Tests/Run-IsolatedMySql.ps1 -IncludeApi
 ```
 
-Проверяются откат при ошибке, одновременные продажи, ключи повторов, роли, блокировка входа, истечение и отзыв сессий, недоверенный сертификат и соответствие OpenAPI реальным операциям. Для неизменённых рабочих экранов есть сравнение пикселей и дерева контролов. [Отчёт о проверках](docs/VALIDATION.md).
+Checks cover rollback, concurrent sales, idempotency keys, roles, login lockouts, session expiry and revocation, untrusted certificates and OpenAPI consistency. Unchanged screens have pixel and control-tree comparisons. See the [validation report](docs/VALIDATION.md).
 
 <a id="roadmap"></a>
 
-## 06 / Что есть и куда развивать
+## 06 / Available now and next steps
 
-**Реализовано**
+**Implemented**
 
-- [x] Каталог, поиск, цены, приход и складские остатки.
-- [x] Транзакционные продажи, история чеков и показатели магазина.
-- [x] Переиспользуемые блоки EasyDo и независимый пример приложения.
-- [x] Отдельный сервер, HTTPS API и C# SDK.
-- [x] Вход, роли, хэши паролей, отзыв сессий и защита от перебора.
-- [x] Защита от повторной продажи и устаревшего сохранения карточки.
-- [x] OpenAPI, инструкции запуска и интеграционные тесты.
+- [x] Product catalog, search, prices, stock receipts and inventory levels.
+- [x] Transactional sales, receipt history and store metrics.
+- [x] Reusable EasyDo blocks and an independent example application.
+- [x] Separate server, HTTPS API and C# SDK.
+- [x] Login, roles, password hashing, session revocation and brute-force protection.
+- [x] Protection against duplicate sales and stale product updates.
+- [x] OpenAPI, setup instructions and integration tests.
 
-**Следующие направления — ещё не реализованы**
+**Future directions — not implemented yet**
 
-- [ ] Асинхронная загрузка WinForms-экранов с состояниями ожидания и отменой.
-- [ ] Возвраты, списания и журнал движения товаров.
-- [ ] Поставщики, закупки и несколько складов.
-- [ ] Импорт/экспорт, дополнительные фильтры и расширенная аналитика.
-- [ ] Расширенный аудит действий, MFA/SSO и самостоятельное восстановление доступа.
-- [ ] CI-проверки и автоматизированная подготовка релизов.
+- [ ] Asynchronous WinForms loading with progress and cancellation.
+- [ ] Returns, write-offs and a stock movement ledger.
+- [ ] Suppliers, purchasing and multiple warehouses.
+- [ ] Import/export, additional filters and advanced analytics.
+- [ ] Extended audit trail, MFA/SSO and self-service account recovery.
+- [ ] CI checks and automated release preparation.
 
-Это направления развития, а не обещание сроков. Текущая версия рассчитана на один магазин; налоги, фискализация и полноценная финансовая бухгалтерия в неё не входят. Синхронные адаптеры текущего WinForms-интерфейса могут блокировать окно на время сетевого запроса.
+These are development directions, not delivery commitments. The current version serves one store and does not include tax calculation, fiscal compliance or full financial accounting. Synchronous adapters in the current WinForms interface may block the window during network requests.
 
-## 07 / Для портфолио и участников
+## 07 / Portfolio and contributions
 
-**[Projektbeschreibung auf Deutsch →](docs/PORTFOLIO.md)** — назначение, архитектура, инженерные решения, реальные сценарии использования EasyDo и границы проекта.
+**[Projektbeschreibung auf Deutsch →](docs/PORTFOLIO.md)** — purpose, architecture, engineering decisions, actual EasyDo use cases and project boundaries.
 
-В Git сохранены отдельные этапы:
+Git branches preserve the development stages:
 
-| Ветка | Содержание |
+| Branch | Contents |
 | :--- | :--- |
-| `main` | Исходное приложение с прямым доступом к MySQL |
-| `redbox/easydo-baseline` | Сохранённая версия после перехода на EasyDo |
-| `redbox/server-api` | Обновление 2.0: сервер, клиент, API и эта документация |
+| [`main`](https://github.com/TikTak-creator/InventorySystem/tree/main) | Original application with direct MySQL access |
+| [`redbox/easydo-baseline`](https://github.com/TikTak-creator/InventorySystem/tree/redbox/easydo-baseline) | Preserved version after the EasyDo migration |
+| [`redbox/server-api`](https://github.com/TikTak-creator/InventorySystem/tree/redbox/server-api) | Version 2.0: server, client, API and this documentation |
 
-Для вклада создайте ветку от нужной версии, опишите сценарий и ожидаемое поведение, выполните относящиеся к изменению проверки. Для API-изменений обновите контракт и документацию. Не добавляйте пароли, токены, закрытые ключи или дампы рабочих данных.
+Create contributions from the appropriate branch, describe the scenario and expected behavior, and run the relevant checks. API changes should include updated contracts and documentation. Do not commit passwords, tokens, private keys or production data dumps.
 
 <details>
-<summary><strong>О визуальном оформлении</strong></summary>
+<summary><strong>About the artwork and documentation languages</strong></summary>
 
-Баннер — авторская редакция владельца проекта на основе неофициального фан-арта по **Jujutsu Kaisen**: Юджи Итадори, Аой Тодо, Сугуру Гето и Сатору Годжо. Палитра — чёрный, багровый и фиолетовый; техническая документация и интерфейс приложения оформлены отдельно от этой обложки.
+The banner is the project owner's edited version of unofficial **Jujutsu Kaisen** fan art featuring Yuji Itadori, Aoi Todo, Suguru Geto and Satoru Gojo. The palette combines black, crimson and violet. [Banner and artwork history](docs/assets/ART-DIRECTION.md).
 
-[Баннер и история оформления](docs/assets/ART-DIRECTION.md).
+This root README is in English; [readme_ru.md](readme_ru.md) contains the Russian edition. Detailed technical guides and the EasyDo documentation are currently in Russian, while the portfolio is in German. Switching the README language does not change the application interface.
 
 </details>
 
@@ -364,5 +365,5 @@ dotnet run --project EasyDo/Tests/StockFlow.Specs
 
 <div align="center">
 <sub><strong>STOCKFLOW</strong> · Inventory under control · Built with C# &amp; EasyDo</sub><br />
-<sub><a href="#users">Начать работу</a> · <a href="#developers">Изучить код</a> · <a href="docs/API.md">Подключить API</a></sub>
+<sub><a href="#users">Get started</a> · <a href="#developers">Explore the code</a> · <a href="docs/API.md">Connect to the API</a></sub>
 </div>
