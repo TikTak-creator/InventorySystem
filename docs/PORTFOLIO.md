@@ -82,7 +82,7 @@ _recent.Define<Sale>()
 
 ## Qualitätssicherung und Versionsgeschichte
 
-Die ursprüngliche Version bleibt auf `main` erhalten. `codex/easydo-baseline` hält die abgeschlossene EasyDo-Umstellung fest; `codex/server-api` enthält die Client-Server-Erweiterung. Es wurde keine alte Branch-Historie gelöscht.
+Die ursprüngliche Version bleibt auf `main` erhalten. `redbox/easydo-baseline` hält die abgeschlossene EasyDo-Umstellung fest; `redbox/server-api` enthält die Client-Server-Erweiterung. Es wurde keine alte Branch-Historie gelöscht.
 
 Regression-Tests prüfen Ressourcenfreigabe, Rollback und Abbruchverhalten. MySQL-Tests prüfen Bestände, Preise, Belege und konkurrierende Verkäufe. HTTPS-Tests prüfen Anmeldung, Berechtigungen, Tokens, Widerruf, Konflikte, Idempotenz und TLS-Validierung. Für unveränderte Arbeitsmasken gibt es einen Vergleich von Control-Baum und gerenderten Pixeln. Die neuen Anmelde- und Statusbereiche werden separat geprüft; sie sind beabsichtigte Änderungen.
 
