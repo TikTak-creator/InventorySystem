@@ -1,0 +1,41 @@
+STOCKFLOW — WINDOWS CLIENT
+
+ENGLISH
+
+1. Open StockFlow from the Start menu or its optional desktop shortcut.
+2. Enter the HTTPS server address supplied by your administrator.
+3. Enter your StockFlow username and password.
+
+.NET is included. You do not need the SDK, MySQL or a database password
+on a client computer. The app interface is currently in Russian.
+
+The server must already be configured and running. If you cannot log in,
+check the address and account details with your administrator. HTTPS
+certificates must be valid and trusted; do not disable certificate checks.
+
+To uninstall: Windows Settings > Apps > Installed apps > StockFlow.
+Your server database is not removed by uninstalling the client.
+An existing appsettings.json is preserved during upgrades and uninstall.
+
+Updates: https://github.com/TikTak-creator/InventorySystem/releases
+Source: https://github.com/TikTak-creator/InventorySystem/tree/redbox/server-api
+
+РУССКИЙ
+
+1. Откройте StockFlow через меню «Пуск» или ярлык на рабочем столе.
+2. Укажите HTTPS-адрес сервера, который выдал администратор.
+3. Введите свой логин и пароль StockFlow.
+
+.NET уже включён. На клиентском компьютере не нужны SDK, MySQL
+и пароль базы данных. Интерфейс приложения — на русском.
+
+Сервер должен быть настроен и запущен заранее. Если вход не работает,
+проверьте адрес и учётную запись с администратором. HTTPS-сертификат
+должен быть действительным и доверенным; не отключайте его проверку.
+
+Удаление: Параметры Windows > Приложения > Установленные приложения > StockFlow.
+Удаление клиента не удаляет базу на сервере.
+Существующий appsettings.json сохраняется при обновлении и удалении.
+
+Обновления: https://github.com/TikTak-creator/InventorySystem/releases
+Исходники: https://github.com/TikTak-creator/InventorySystem/tree/redbox/server-api

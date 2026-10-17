@@ -68,9 +68,13 @@ Receipts preserve the product name, price and cost at the time of sale. Editing 
 
 </details>
 
-### Connect and get started
+### Download and get started
 
-1. Ask your administrator for the server address, your account and a Windows client build.
+**[Download v2.0.0 →](https://github.com/TikTak-creator/InventorySystem/releases/tag/v2.0.0)** · [Which file do I need?](docs/RELEASES.md)
+
+The Windows installer includes .NET and adds a Start-menu shortcut. Administrators get a separate server ZIP; developers can download the source ZIP.
+
+1. Install the Windows client from the release page and ask your administrator for the server address and your account.
 2. Start `StockFlow.exe` and enter the HTTPS address, such as `https://localhost:7071` for a local server.
 3. Enter your username and password. After login, the Dashboard, Products, Sales and Stock sections become available.
 4. Use the features allowed by your role. The **«Выйти» (Log out)** button closes the client and attempts to revoke the server session.
@@ -326,6 +330,7 @@ Checks cover rollback, concurrent sales, idempotency keys, roles, login lockouts
 - [x] Login, roles, password hashing, session revocation and brute-force protection.
 - [x] Protection against duplicate sales and stale product updates.
 - [x] OpenAPI, setup instructions and integration tests.
+- [x] Windows client installer, self-contained server ZIP, source ZIP and release build script.
 
 **Future directions — not implemented yet**
 
@@ -334,7 +339,7 @@ Checks cover rollback, concurrent sales, idempotency keys, roles, login lockouts
 - [ ] Suppliers, purchasing and multiple warehouses.
 - [ ] Import/export, additional filters and advanced analytics.
 - [ ] Extended audit trail, MFA/SSO and self-service account recovery.
-- [ ] CI checks and automated release preparation.
+- [ ] CI checks, code signing and automated release publication.
 
 These are development directions, not delivery commitments. The current version serves one store and does not include tax calculation, fiscal compliance or full financial accounting. Synchronous adapters in the current WinForms interface may block the window during network requests.
 
